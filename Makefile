@@ -1,4 +1,4 @@
-APP_NAME=todo
+APP_NAME=server
 GRPC_ADDR?=:50051
 POSTGRES_DSN?=postgres://postgres:postgres@localhost:55432/todos?sslmode=disable
 COMPOSE_TEST_FILE?=docker-compose.test.yml

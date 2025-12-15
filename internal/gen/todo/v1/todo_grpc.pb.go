@@ -29,11 +29,18 @@ const (
 // TodoServiceClient is the client API for TodoService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// gRPC сервис для управления задачами.
 type TodoServiceClient interface {
+	// Создает новую задачу.
 	CreateTodo(ctx context.Context, in *CreateTodoRequest, opts ...grpc.CallOption) (*CreateTodoResponse, error)
+	// Получает задачу по идентификатору.
 	GetTodo(ctx context.Context, in *GetTodoRequest, opts ...grpc.CallOption) (*Todo, error)
+	// Возвращает список всех задач.
 	ListTodos(ctx context.Context, in *ListTodosRequest, opts ...grpc.CallOption) (*ListTodosResponse, error)
+	// Обновляет существующую задачу.
 	UpdateTodo(ctx context.Context, in *UpdateTodoRequest, opts ...grpc.CallOption) (*Todo, error)
+	// Удаляет задачу по идентификатору.
 	DeleteTodo(ctx context.Context, in *DeleteTodoRequest, opts ...grpc.CallOption) (*DeleteTodoResponse, error)
 }
 
@@ -98,11 +105,18 @@ func (c *todoServiceClient) DeleteTodo(ctx context.Context, in *DeleteTodoReques
 // TodoServiceServer is the server API for TodoService service.
 // All implementations must embed UnimplementedTodoServiceServer
 // for forward compatibility.
+//
+// gRPC сервис для управления задачами.
 type TodoServiceServer interface {
+	// Создает новую задачу.
 	CreateTodo(context.Context, *CreateTodoRequest) (*CreateTodoResponse, error)
+	// Получает задачу по идентификатору.
 	GetTodo(context.Context, *GetTodoRequest) (*Todo, error)
+	// Возвращает список всех задач.
 	ListTodos(context.Context, *ListTodosRequest) (*ListTodosResponse, error)
+	// Обновляет существующую задачу.
 	UpdateTodo(context.Context, *UpdateTodoRequest) (*Todo, error)
+	// Удаляет задачу по идентификатору.
 	DeleteTodo(context.Context, *DeleteTodoRequest) (*DeleteTodoResponse, error)
 	mustEmbedUnimplementedTodoServiceServer()
 }

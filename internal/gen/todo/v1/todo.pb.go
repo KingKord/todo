@@ -21,14 +21,21 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Задача с основными полями и статусом выполнения.
 type Todo struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
-	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
-	Completed     bool                   `protobuf:"varint,4,opt,name=completed,proto3" json:"completed,omitempty"`
-	CreatedAt     int64                  `protobuf:"varint,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     int64                  `protobuf:"varint,6,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Уникальный идентификатор.
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// Заголовок задачи.
+	Title string `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	// Подробное описание.
+	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	// Признак завершения.
+	Completed bool `protobuf:"varint,4,opt,name=completed,proto3" json:"completed,omitempty"`
+	// Время создания в unix timestamp.
+	CreatedAt int64 `protobuf:"varint,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	// Время обновления в unix timestamp.
+	UpdatedAt     int64 `protobuf:"varint,6,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -105,10 +112,13 @@ func (x *Todo) GetUpdatedAt() int64 {
 	return 0
 }
 
+// Запрос на создание новой задачи.
 type CreateTodoRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Title         string                 `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
-	Description   string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Заголовок задачи.
+	Title string `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
+	// Подробное описание.
+	Description   string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -157,9 +167,11 @@ func (x *CreateTodoRequest) GetDescription() string {
 	return ""
 }
 
+// Ответ с созданной задачей.
 type CreateTodoResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Todo          *Todo                  `protobuf:"bytes,1,opt,name=todo,proto3" json:"todo,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Созданная задача.
+	Todo          *Todo `protobuf:"bytes,1,opt,name=todo,proto3" json:"todo,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -201,9 +213,11 @@ func (x *CreateTodoResponse) GetTodo() *Todo {
 	return nil
 }
 
+// Запрос на получение задачи по идентификатору.
 type GetTodoRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Уникальный идентификатор задачи.
+	Id            string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -245,6 +259,7 @@ func (x *GetTodoRequest) GetId() string {
 	return ""
 }
 
+// Запрос списка всех задач.
 type ListTodosRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -281,9 +296,11 @@ func (*ListTodosRequest) Descriptor() ([]byte, []int) {
 	return file_todo_v1_todo_proto_rawDescGZIP(), []int{4}
 }
 
+// Ответ со списком задач.
 type ListTodosResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Todos         []*Todo                `protobuf:"bytes,1,rep,name=todos,proto3" json:"todos,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Коллекция найденных задач.
+	Todos         []*Todo `protobuf:"bytes,1,rep,name=todos,proto3" json:"todos,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -325,12 +342,17 @@ func (x *ListTodosResponse) GetTodos() []*Todo {
 	return nil
 }
 
+// Запрос на обновление существующей задачи.
 type UpdateTodoRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
-	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
-	Completed     bool                   `protobuf:"varint,4,opt,name=completed,proto3" json:"completed,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Уникальный идентификатор задачи.
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// Новый заголовок.
+	Title string `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	// Новое описание.
+	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	// Новый статус завершения.
+	Completed     bool `protobuf:"varint,4,opt,name=completed,proto3" json:"completed,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -393,9 +415,11 @@ func (x *UpdateTodoRequest) GetCompleted() bool {
 	return false
 }
 
+// Запрос на удаление задачи.
 type DeleteTodoRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Уникальный идентификатор задачи.
+	Id            string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -437,6 +461,7 @@ func (x *DeleteTodoRequest) GetId() string {
 	return ""
 }
 
+// Ответ на удаление задачи (пустой).
 type DeleteTodoResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields

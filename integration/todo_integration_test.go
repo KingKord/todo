@@ -14,7 +14,11 @@ import (
 	"time"
 
 	gen "todo/internal/gen/todo/v1"
+	todogrpc "todo/internal/handler/grpc/todo"
 	"todo/internal/server"
+	todosvc "todo/internal/service/todo"
+	"todo/internal/storage"
+	todorepo "todo/internal/todo"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"google.golang.org/grpc"
@@ -40,11 +44,24 @@ func TestTodoCRUD(t *testing.T) {
 	}
 
 	addr := randomAddr()
+	db, err := storage.OpenDB(ctx, dsn)
+	if err != nil {
+		t.Fatalf("connect database: %v", err)
+	}
+	defer db.Close()
+
+	if err := storage.ApplyMigrations(ctx, db); err != nil {
+		t.Fatalf("apply migrations: %v", err)
+	}
+
+	repo := todorepo.NewRepository(db)
+	service := todosvc.NewService(repo)
+	handler := todogrpc.NewHandler(service)
+
 	srvErr := make(chan error, 1)
 	go func() {
-		srvErr <- server.Run(ctx, server.Config{
-			Addr:        addr,
-			DatabaseURL: dsn,
+		srvErr <- server.Run(ctx, server.Config{Addr: addr}, func(s *grpc.Server) {
+			gen.RegisterTodoServiceServer(s, handler)
 		})
 	}()
 

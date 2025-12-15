@@ -4,51 +4,83 @@ package todo.v1;
 
 option go_package = "todo/internal/gen/todo/v1;todo";
 
+
+// gRPC сервис для управления задачами.
+service TodoService {
+  // Создает новую задачу.
+  rpc CreateTodo(CreateTodoRequest) returns (CreateTodoResponse);
+  // Получает задачу по идентификатору.
+  rpc GetTodo(GetTodoRequest) returns (Todo);
+  // Возвращает список всех задач.
+  rpc ListTodos(ListTodosRequest) returns (ListTodosResponse);
+  // Обновляет существующую задачу.
+  rpc UpdateTodo(UpdateTodoRequest) returns (Todo);
+  // Удаляет задачу по идентификатору.
+  rpc DeleteTodo(DeleteTodoRequest) returns (DeleteTodoResponse);
+}
+
+// Задача с основными полями и статусом выполнения.
 message Todo {
+  // Уникальный идентификатор.
   string id = 1;
+  // Заголовок задачи.
   string title = 2;
+  // Подробное описание.
   string description = 3;
+  // Признак завершения.
   bool completed = 4;
+  // Время создания в unix timestamp.
   int64 created_at = 5;
+  // Время обновления в unix timestamp.
   int64 updated_at = 6;
 }
 
+// Запрос на создание новой задачи.
 message CreateTodoRequest {
+  // Заголовок задачи.
   string title = 1;
+  // Подробное описание.
   string description = 2;
 }
 
+// Ответ с созданной задачей.
 message CreateTodoResponse {
+  // Созданная задача.
   Todo todo = 1;
 }
 
+// Запрос на получение задачи по идентификатору.
 message GetTodoRequest {
+  // Уникальный идентификатор задачи.
   string id = 1;
 }
 
+// Запрос списка всех задач.
 message ListTodosRequest {}
 
+// Ответ со списком задач.
 message ListTodosResponse {
+  // Коллекция найденных задач.
   repeated Todo todos = 1;
 }
 
+// Запрос на обновление существующей задачи.
 message UpdateTodoRequest {
+  // Уникальный идентификатор задачи.
   string id = 1;
+  // Новый заголовок.
   string title = 2;
+  // Новое описание.
   string description = 3;
+  // Новый статус завершения.
   bool completed = 4;
 }
 
+// Запрос на удаление задачи.
 message DeleteTodoRequest {
+  // Уникальный идентификатор задачи.
   string id = 1;
 }
 
+// Ответ на удаление задачи (пустой).
 message DeleteTodoResponse {}
-
-service TodoService {
-  rpc CreateTodo(CreateTodoRequest) returns (CreateTodoResponse);
-  rpc GetTodo(GetTodoRequest) returns (Todo);
-  rpc ListTodos(ListTodosRequest) returns (ListTodosResponse);
-  rpc UpdateTodo(UpdateTodoRequest) returns (Todo);
-  rpc DeleteTodo(DeleteTodoRequest) returns (DeleteTodoResponse);
-}
