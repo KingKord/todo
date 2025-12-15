@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: todos
+    ports:
+      - "55432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      GRPC_ADDR: :50051
+      POSTGRES_DSN: postgres://postgres:postgres@db:5432/todos?sslmode=disable
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "50051:50051"
+
+volumes:
+  pgdata:

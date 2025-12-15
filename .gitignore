@@ -1,0 +1,19 @@
+# Binaries and build artifacts
+bin/
+*.exe
+*.exe~
+*.out
+*.test
+
+# Dependency directories
+vendor/
+
+# Editor and OS files
+.idea/
+.vscode/
+.DS_Store
+
+# Logs and coverage
+*.log
+coverage*.txt
+coverage*.out
