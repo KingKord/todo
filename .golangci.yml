@@ -1,0 +1,21 @@
+run:
+  timeout: 5m
+  tests: true
+
+linters:
+  enable:
+    - govet
+    - staticcheck
+    - gosimple
+    - errcheck
+    - ineffassign
+    - revive
+    - misspell
+
+issues:
+  exclude-use-default: false
+  exclude:
+    - "^generated file" # safety catch-all
+
+skip-files:
+  - ".*\\.pb\\.go"

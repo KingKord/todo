@@ -1,3 +1,4 @@
+// Package main запускает gRPC сервер todo.
 package main
 
 import (
@@ -28,7 +29,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("connect database: %v", err)
 	}
-	defer db.Close()
+	defer func() {
+		_ = db.Close()
+	}()
 
 	if err := storage.ApplyMigrations(ctx, db); err != nil {
 		log.Fatalf("apply migrations: %v", err)

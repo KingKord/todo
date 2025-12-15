@@ -1,3 +1,4 @@
+// Package todo содержит репозиторий для работы с задачами в базе данных.
 package todo
 
 import (
@@ -7,12 +8,15 @@ import (
 	"time"
 )
 
+// ErrNotFound возвращается, если задача не найдена.
 var ErrNotFound = errors.New("todo not found")
 
+// Repository инкапсулирует доступ к таблице задач.
 type Repository struct {
 	db *sql.DB
 }
 
+// Record представляет запись задачи.
 type Record struct {
 	ID          string
 	Title       string
@@ -22,10 +26,12 @@ type Record struct {
 	UpdatedAt   time.Time
 }
 
+// NewRepository создает новый репозиторий задач.
 func NewRepository(db *sql.DB) *Repository {
 	return &Repository{db: db}
 }
 
+// Create добавляет новую задачу.
 func (r *Repository) Create(ctx context.Context, title, description string) (Record, error) {
 	now := time.Now().UTC()
 	query := `
@@ -42,6 +48,7 @@ returning id, title, description, completed, created_at, updated_at`
 	return rec, nil
 }
 
+// Get возвращает задачу по идентификатору.
 func (r *Repository) Get(ctx context.Context, id string) (Record, error) {
 	query := `
 select id, title, description, completed, created_at, updated_at
@@ -60,6 +67,7 @@ where id = $1`
 	return rec, nil
 }
 
+// List возвращает список задач, отсортированных по дате создания.
 func (r *Repository) List(ctx context.Context) ([]Record, error) {
 	query := `
 select id, title, description, completed, created_at, updated_at
@@ -70,7 +78,9 @@ order by created_at desc`
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() {
+		_ = rows.Close()
+	}()
 
 	var items []Record
 	for rows.Next() {
@@ -88,6 +98,7 @@ order by created_at desc`
 	return items, nil
 }
 
+// Update изменяет существующую задачу.
 func (r *Repository) Update(ctx context.Context, id, title, description string, completed bool) (Record, error) {
 	now := time.Now().UTC()
 	query := `
@@ -108,6 +119,7 @@ returning id, title, description, completed, created_at, updated_at`
 	return rec, nil
 }
 
+// Delete удаляет задачу по идентификатору.
 func (r *Repository) Delete(ctx context.Context, id string) error {
 	res, err := r.db.ExecContext(ctx, `delete from todos where id = $1`, id)
 	if err != nil {

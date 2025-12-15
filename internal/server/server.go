@@ -1,3 +1,4 @@
+// Package server поднимает gRPC-сервер и обрабатывает его жизненный цикл.
 package server
 
 import (
@@ -15,12 +16,15 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
+// Config описывает параметры запуска gRPC-сервера.
 type Config struct {
 	Addr string
 }
 
+// RegisterFunc регистрирует gRPC-сервисы на сервере.
 type RegisterFunc func(grpcServer *grpc.Server)
 
+// Run создаёт и запускает gRPC-сервер с указанной регистрацией сервисов.
 func Run(ctx context.Context, cfg Config, register RegisterFunc) error {
 	if register == nil {
 		return fmt.Errorf("register function is required")
@@ -66,6 +70,7 @@ func stopServer(ctx context.Context, srv *grpc.Server) {
 	}
 }
 
+// WaitForSignal создаёт контекст, отменяемый по SIGINT/SIGTERM.
 func WaitForSignal(parent context.Context) context.Context {
 	ctx, cancel := signal.NotifyContext(parent, syscall.SIGINT, syscall.SIGTERM)
 	go func() {

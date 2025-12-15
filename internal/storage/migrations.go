@@ -13,6 +13,7 @@ import (
 //go:embed migrations/*.sql
 var migrationsFS embed.FS
 
+// ApplyMigrations выполняет SQL-миграции, встроенные в бинарь.
 func ApplyMigrations(ctx context.Context, db *sql.DB) error {
 	files, err := fs.ReadDir(migrationsFS, "migrations")
 	if err != nil {
